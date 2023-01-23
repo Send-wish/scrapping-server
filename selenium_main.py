@@ -8,7 +8,6 @@ from flask import jsonify
 from elevenst import elevenst_get_info
 
 DRIVER_PATH = "/home/ubuntu/chromedriver"
-# DRIVER_PATH = "/chromedriver"
 options = Options()
 options = webdriver.ChromeOptions()
 options.add_argument("--headless")
@@ -22,10 +21,17 @@ options.add_argument('--disable-dev-shm-usage')
 mobile_emulation = { "deviceName": "iPhone X" }
 options.add_experimental_option("mobileEmulation", mobile_emulation)
 
+class Product:
+    def __init__(self):
+        self.url = ""
+        self.title = ""
+        self.price = 0
+        self.img = ""
+        self.category = ""
+
 def web_scrap(url): 
-    print(DRIVER_PATH)
-    browser = webdriver.Chrome(executable_path=DRIVER_PATH, options = options)
     try :
+        browser = webdriver.Chrome(options = options, executable_path=DRIVER_PATH)
         if (url.find("musinsaapp") != -1): # 무신사 앱링크면
             url += "?_imcp=1"
         browser.get(url)
@@ -38,9 +44,22 @@ def web_scrap(url):
             print("price", price)
             img = get_img(browser, url)
             print("img", img)
-
         print("===Finish Scraping===")
-        return jsonify({'url': url, 'title': title, 'price': price, 'img': img})
+        
+        print("===Finish Scraping===")
+        product = Product()
+        product.url = url
+        product.title = title
+        product.price = price
+        product.img = img
+        return product
+
     except :
         print("===SCRAP ERROR===")
-        return jsonify({'url': url, 'title': '사이트로 이동하기', 'price': '-', 'img': 'https://sendwish-img-bucket.s3.ap-northeast-2.amazonaws.com/collection_default.png'})
+        product = Product()
+        product.url = url
+        product.title = '사이트로 이동하기'
+        product.price = 0
+        product.img = 'https://sendwish-img-bucket.s3.ap-northeast-2.amazonaws.com/collection_default.png'
+        return product
+        
