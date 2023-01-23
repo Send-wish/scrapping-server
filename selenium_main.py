@@ -7,7 +7,7 @@ from selenium_img import get_img
 from flask import jsonify
 from elevenst import elevenst_get_info
 
-DRIVER_PATH = "/app/chrome/chromedriver"
+DRIVER_PATH = "/home/ubuntu/chromedriver"
 options = Options()
 options = webdriver.ChromeOptions()
 options.add_argument("--headless")
@@ -29,8 +29,19 @@ class Product:
         self.img = ""
         self.category = ""
 
+class Product:
+    def __init__(self):
+        self.url = ""
+        self.title = ""
+        self.price = 0
+        self.img = ""
+        self.category = ""
+
 def web_scrap(url): 
+    print(DRIVER_PATH)
+    browser = webdriver.Chrome(executable_path=DRIVER_PATH, options = options)
     try :
+        browser = webdriver.Chrome(options = options, executable_path=DRIVER_PATH)
         browser = webdriver.Chrome(options = options, executable_path=DRIVER_PATH)
         if (url.find("musinsaapp") != -1): # 무신사 앱링크면
             url += "?_imcp=1"
@@ -47,6 +58,15 @@ def web_scrap(url):
         print("===Finish Scraping===")
         
         print("===Finish Scraping===")
+        
+        print("===Finish Scraping===")
+        product = Product()
+        product.url = url
+        product.title = title
+        product.price = price
+        product.img = img
+        return product
+
         product = Product()
         product.url = url
         product.title = title
@@ -59,7 +79,7 @@ def web_scrap(url):
         product = Product()
         product.url = url
         product.title = '사이트로 이동하기'
-        product.price = '-'
+        product.price = 0
         product.img = 'https://sendwish-img-bucket.s3.ap-northeast-2.amazonaws.com/collection_default.png'
         return product
         
