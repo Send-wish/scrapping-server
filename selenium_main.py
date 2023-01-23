@@ -30,6 +30,8 @@ class Product:
         self.category = ""
 
 def web_scrap(url): 
+    print(DRIVER_PATH)
+    browser = webdriver.Chrome(executable_path=DRIVER_PATH, options = options)
     try :
         browser = webdriver.Chrome(options = options, executable_path=DRIVER_PATH)
         if (url.find("musinsaapp") != -1): # 무신사 앱링크면
