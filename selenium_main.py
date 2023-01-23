@@ -29,10 +29,19 @@ class Product:
         self.img = ""
         self.category = ""
 
+class Product:
+    def __init__(self):
+        self.url = ""
+        self.title = ""
+        self.price = 0
+        self.img = ""
+        self.category = ""
+
 def web_scrap(url): 
     print(DRIVER_PATH)
     browser = webdriver.Chrome(executable_path=DRIVER_PATH, options = options)
     try :
+        browser = webdriver.Chrome(options = options, executable_path=DRIVER_PATH)
         browser = webdriver.Chrome(options = options, executable_path=DRIVER_PATH)
         if (url.find("musinsaapp") != -1): # 무신사 앱링크면
             url += "?_imcp=1"
@@ -49,6 +58,15 @@ def web_scrap(url):
         print("===Finish Scraping===")
         
         print("===Finish Scraping===")
+        
+        print("===Finish Scraping===")
+        product = Product()
+        product.url = url
+        product.title = title
+        product.price = price
+        product.img = img
+        return product
+
         product = Product()
         product.url = url
         product.title = title
