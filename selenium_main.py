@@ -18,9 +18,9 @@ options.add_argument("lang=ko_KR")
 options.add_argument('--disable-blink-features=AutomationControlled')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
-options.add_argument("disable-gpu") 
-options.add_argument("disable-infobars")
-options.add_argument("--disable-extensions")
+# options.add_argument("disable-gpu") 
+# options.add_argument("disable-infobars")
+# options.add_argument("--disable-extensions")
 mobile_emulation = { "deviceName": "iPhone X" }
 options.add_experimental_option("mobileEmulation", mobile_emulation)
 browser = webdriver.Chrome(options = options, executable_path=DRIVER_PATH)
@@ -44,4 +44,4 @@ def web_scrap(url):
 
     except :
         print("===SCRAP ERROR===")
-        return jsonify({'url': url, 'title': '사이트로 이동하기', 'price': '-', 'img': 'https://sendwish-img-bucket.s3.ap-northeast-2.amazonaws.com/default_image.png'})
+        return jsonify({'url': url, 'title': '사이트로 이동하기', 'price': 0, 'img': 'https://sendwish-img-bucket.s3.ap-northeast-2.amazonaws.com/default_image.png'})

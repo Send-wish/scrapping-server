@@ -12,7 +12,7 @@ def hello_world():
 @app.route('/webscrap', methods=['POST'])
 def webscrap():
     data = request.get_json()
-    url_receive = data['url'][0]
+    url_receive = data['url']
     print("url", url_receive)
     # [todo] 예외처리 필요
     print("===Start Scraping===")
