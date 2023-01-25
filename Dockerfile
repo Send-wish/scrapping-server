@@ -4,12 +4,18 @@ WORKDIR /app
 
 RUN pip3 install flask
 
-RUN pip3 install keras
-
-RUN pip3 install tensorflow --no-cache-dir
-
 RUN pip3 install Pillow
+
+RUN pip3 install numpy
+
+RUN pip3 install requests
+
+RUN pip3 install gunicorn
+
+RUN pip3 install gevent
+
+RUN apt-get -y update
 
 COPY . /app
 
-CMD ["python3", "app.py"]
+CMD ["gunicorn", "app:app", "-b", "0.0.0.0:5000", "-w", "3", "--timeout=360", "-k", "gevent"]

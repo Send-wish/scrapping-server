@@ -1,17 +1,18 @@
-from keras.models import load_model
 from PIL import Image, ImageOps #Install pillow instead of PIL
 import numpy as np
 import urllib.request
 from flask import jsonify
 import ssl
+import json
+import requests
+from tfserving import TF_SERVING_IP
+
 ssl._create_default_https_context = ssl._create_unverified_context
+
 
 def categorization(img_url):
     # Disable scientific notation for clarity
     np.set_printoptions(suppress=True)
-
-    # Load the model
-    model = load_model('keras_model.h5', compile=False)
 
     # Load the labels
     class_names = open('labels.txt', 'r').readlines()
@@ -40,12 +41,20 @@ def categorization(img_url):
     # Load the image into the array
     data[0] = normalized_image_array
 
-    # run the inference
-    prediction = model.predict(data)
-    index = np.argmax(prediction)
+    # Pass to TF Serving
+    data = json.dumps({"instances" : data.tolist()})
+    headers = {"content-type" : "application/json"}
+    json_response = requests.post(TF_SERVING_IP, data=data, headers=headers)
+    prediction = json.loads(json_response.text)
+
+    index = np.argmax(prediction['predictions'][0])
+
+    # # run the inference
+    # prediction = model.predict(data)
+    # index = np.argmax(prediction)
     class_name = class_names[index]
-    confidence_score = prediction[0][index]
+    confidence_score = prediction['predictions'][0][index]
 
     print('Class:', class_name, end='')
     print('Confidence score:', confidence_score)
-    return jsonify({'img_url': img_url, 'category':class_name.strip()})
+    return jsonify({'imgUrl': img_url, 'category':class_name.strip()})
